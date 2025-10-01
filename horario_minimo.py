@@ -9,7 +9,18 @@ horarios = {
     'Ana':    ('08', '14'),
     'Raúl':   ('12', '20'),
 }
- 
+
+def validar_hora(hora_completa):
+    hora = hora[0:2]
+    hora = int(hora)
+    minutos = hora_completa[3:5]
+    minutos = int(minutos)
+
+    if(hora>= 0 and hora <=24 and minutos>=0 and minutos<=59):
+        return True
+    else:
+        return False
+
 def mostrar_registros():
     for index, (nombre, (entrada, salida)) in enumerate(horarios.items(), start=1):
         print(f"Indice: {index} - Nombre: {nombre} - Hora de entrada:  {entrada} - Hora de salida: {salida}")
@@ -20,15 +31,10 @@ def contar_entradas():
     try:
         hora_entrada = input("Indica un horario en formato entero (0 - 23): ")
         hora_entrada = int(hora_entrada)
-        # for tupla in horarios.values():
-        #     entrada = tupla[0]
-        #     entrada = int(entrada)
-        #     if (hora_entrada > entrada):
-        #         contador = contador + 1
 
-        for index, (nombre, (entrada, salida)) in enumerate(horarios.items()):
+        for (nombre, (entrada, salida)) in horarios.items():
             entrada = int(entrada)
-            if (hora_entrada < entrada):
+            if (entrada < hora_entrada):
                 contador = contador + 1
 
         print(f"{contador} personas han llegado antes del horario indicado. ")

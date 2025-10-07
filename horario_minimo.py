@@ -10,36 +10,68 @@ horarios = {
     'Raúl':   ('12', '20'),
 }
 
-def validar_hora(hora_completa):
-    hora = hora[0:2]
-    hora = int(hora)
-    minutos = hora_completa[3:5]
-    minutos = int(minutos)
-
-    if(hora>= 0 and hora <=24 and minutos>=0 and minutos<=59):
-        return True
-    else:
+def formatear_entrada(hora_completa):
+    try:
+        hora = hora_completa[0:2]
+        hora = int(hora)
+        
+        if(len(hora_completa) == 2):    
+            minutos = 00
+        elif(len(hora_completa) == 5):    
+            minutos = hora_completa[3:5]
+            minutos = int(minutos)
+        else:
+            return False
+        
+        if(hora>= 0 and hora <=24 and minutos>=0 and minutos<=59):
+            return {"hora":hora, "minutos":minutos}
+        else:
+            return {}
+    except:
         return False
 
 def mostrar_registros():
-    for index, (nombre, (entrada, salida)) in enumerate(horarios.items(), start=1):
+    for index, (nombre, (entrada, salida)) in enumerate(horarios.items(), start=0):
         print(f"Indice: {index} - Nombre: {nombre} - Hora de entrada:  {entrada} - Hora de salida: {salida}")
             
 
 def contar_entradas():
     contador = 0
     try:
-        hora_entrada = input("Indica un horario en formato entero (0 - 23): ")
-        hora_entrada = int(hora_entrada)
+        horario_indicado = input("Indica un horario en formato entero (HH) o (HH:MM): ")
+        if (formatear_entrada(horario_indicado)):
+            # Separar los HH:MM del horario indicado 
+                horario_indicado = formatear_entrada(horario_indicado)
+                # hora_indicada = horario_indicado[0:2]
+                # hora_indicada = int(hora_indicada)
+                # if(len(horario_indicado) == 2):
+                #     min_indicados = 0
+                # else:
+                #     min_indicados = horario_indicado[3:5]
+                #     min_indicados = int(min_indicados)
+            
+                for (nombre, (entrada, salida)) in horarios.items():
+                    
+                    # # Separar los HH:MM de la lista de horarios 
+                    entrada = formatear_entrada(entrada)
+                    # hora = entrada[0:2]
+                    # hora = int(hora)
+                    # if(len(entrada) == 2):
+                    #     minutos = 0
+                    # else:
+                    #     minutos = entrada[3:5]
+                    #     minutos = int(minutos)
+                    # # Comparar el horario con el indicado para ver si es menor 
+                    if (entrada["hora"] < horario_indicado["hora"] or entrada["hora"] == horario_indicado["hora"] 
+                        and entrada["minutos"] < horario_indicado["minutos"]):
+                        contador = contador + 1
 
-        for (nombre, (entrada, salida)) in horarios.items():
-            entrada = int(entrada)
-            if (entrada < hora_entrada):
-                contador = contador + 1
-
-        print(f"{contador} personas han llegado antes del horario indicado. ")
+                print(f"{contador} personas han llegado antes del horario indicado. ")
+        else:
+            print("Horario Invalido, tienes que indicar un horario en formato (HH) o (HH:MM):")
     except:
         print("Error al poner el horario")
+
 
 def menu():
     """

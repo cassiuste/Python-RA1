@@ -1,14 +1,32 @@
+import json
 # Las horas son en HH:MM, si son HH solo los convierte
 
-horarios = {
-    'María':  ('08', '16'),
-    'Juan':   ('09', '17'),
-    'Lucía':  ('07', '15'),
-    'Diego':  ('10', '18'),
-    # Ampliación (Actividad sugerida: añade más y verifica que todo sigue funcionando)
-    'Ana':    ('08', '14'),
-    'Raúl':   ('12', '20'),
-}
+# horarios = {
+#     'María':  ('08', '16'),
+#     'Juan':   ('09', '17'),
+#     'Lucía':  ('07', '15'),
+#     'Diego':  ('10', '18'),
+#     # Ampliación (Actividad sugerida: añade más y verifica que todo sigue funcionando)
+#     'Ana':    ('08', '14'),
+#     'Raúl':   ('12', '20'),
+# }
+
+
+def leer_horarios():
+    with open('horarios.json', encoding='utf-8') as f:
+        data = json.load(f)
+        horario_json = data.get('horarios', {})
+        horarios = {}
+        for nombre, horario in horario_json.items():
+            horarios[nombre] = tuple(horario)
+        return horarios
+
+horarios = leer_horarios()
+
+def escribir_horarios(nombre_empleado, hora_entrada, hora_salida):
+    horarios[nombre_empleado] = (hora_entrada, hora_salida)
+    with open('horarios.json', 'w', encoding='utf-8') as f:
+        json.dump({'horarios':horarios}, f, indent=4)
 
 def formatear_entrada(hora_completa):
     try:
@@ -42,26 +60,10 @@ def contar_entradas():
         if (formatear_entrada(horario_indicado)):
             # Separar los HH:MM del horario indicado 
                 horario_indicado = formatear_entrada(horario_indicado)
-                # hora_indicada = horario_indicado[0:2]
-                # hora_indicada = int(hora_indicada)
-                # if(len(horario_indicado) == 2):
-                #     min_indicados = 0
-                # else:
-                #     min_indicados = horario_indicado[3:5]
-                #     min_indicados = int(min_indicados)
-            
                 for (nombre, (entrada, salida)) in horarios.items():
-                    
-                    # # Separar los HH:MM de la lista de horarios 
+                    # Separar los HH:MM de la lista de horarios 
                     entrada = formatear_entrada(entrada)
-                    # hora = entrada[0:2]
-                    # hora = int(hora)
-                    # if(len(entrada) == 2):
-                    #     minutos = 0
-                    # else:
-                    #     minutos = entrada[3:5]
-                    #     minutos = int(minutos)
-                    # # Comparar el horario con el indicado para ver si es menor 
+                    # Comparar el horario con el indicado para ver si es menor 
                     if (entrada["hora"] < horario_indicado["hora"] or entrada["hora"] == horario_indicado["hora"] 
                         and entrada["minutos"] < horario_indicado["minutos"]):
                         contador = contador + 1
@@ -72,6 +74,17 @@ def contar_entradas():
     except:
         print("Error al poner el horario")
 
+
+
+def crear_trabajador():
+    nombre_empleado = input("¿Cual es el nombre del trabajador? ")
+    hora_entrada = input("¿Cual es su hora de entrada? (HH) o (HH:MM): ")
+    hora_salida = input("¿Cual es su hora de salida? (HH) o (HH:MM): ")
+    if(formatear_entrada(hora_entrada) and formatear_entrada(hora_salida)):
+        escribir_horarios(nombre_empleado, hora_entrada, hora_salida)
+    else:
+        print("Error en la creación del trabajador")
+    
 
 def menu():
     """
@@ -84,14 +97,17 @@ def menu():
         print("========== MENÚ ==========")
         print("1) Mostrar registros")
         print("2) Contar entradas")
-        print("3) Salir")
-        opcion = input("Elige una opción (1-3): ").strip()
- 
+        print("3) Crear empleado")
+        print("4) Salir")
+        opcion = input("Elige una opción (1-4): ").strip()
+         
         if opcion == '1':
             mostrar_registros()
         elif opcion == '2':
             contar_entradas()
         elif opcion == '3':
+            crear_trabajador()
+        elif opcion == '4':
             print("¡Hasta luego!")
             break
         else:

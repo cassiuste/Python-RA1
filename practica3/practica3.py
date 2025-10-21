@@ -84,15 +84,13 @@ class GestorHorarios:
 
 
     # Crear resumen_clases.csv
-    def crear_resumen():
+    def crear_resumen(self):
         with open('practica3/resumen_clases.csv', 'w', newline='', encoding='utf-8') as f:
             escritor = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            # Cabecera
-            escritor.writerow(['Empleado','Dias trabajados', 'Horas totales'])
-            # Filas con los datos acumulados
-            for empleado, total in horas_totales.items():
-                dias = ','.join(trabajador_dias[empleado])
-                escritor.writerow([empleado, dias, total])
+            
+            escritor.writerow(['empleado','dias_trabajados','horas_totales'])
+            for empleado in self.empleados:
+                escritor.writerow(empleado.fila_csv)
 
 
 registros = leer_registros()
@@ -147,7 +145,7 @@ def responder_preguntas():
     empleados_todos_dias = empleados_por_dia['Lunes'] & empleados_por_dia['Martes'] &empleados_por_dia['Miercoles'] & empleados_por_dia['Jueves'] & empleados_por_dia['Viernes'] & empleados_por_dia['Sabado']& empleados_por_dia['Domingo']
     print(f'Los empleados que trabajaron todos los dias son: {empleados_todos_dias}')
     # ¿Quiénes trabajaron sólo en un día concreto?
-    empleados_un_dia = empleados_por_dia['Lunes'] ^ empleados_por_dia['Martes'] ^ empleados_por_dia['Miercoles'] ^ empleados_por_dia['Jueves'] ^ empleados_por_dia['Viernes'] ^ empleados_por_dia['Sabado'] ^ empleados_por_dia['Domingo']
+    empleados_un_dia = {empleado for empleado, dias in trabajador_dias.items if len(dias) == 1}
     print(f'Los empleados que trabajaron un solo dia son: {empleados_un_dia}')
 
 responder_preguntas()

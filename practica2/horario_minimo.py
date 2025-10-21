@@ -13,7 +13,7 @@ import json
 
 
 def leer_horarios():
-    with open('horarios.json', encoding='utf-8') as f:
+    with open('practica2/horarios.json', encoding='utf-8') as f:
         data = json.load(f)
         horario_json = data.get('horarios', {})
         horarios = {}
@@ -25,7 +25,7 @@ horarios = leer_horarios()
 
 def escribir_horarios(nombre_empleado, hora_entrada, hora_salida):
     horarios[nombre_empleado] = (hora_entrada, hora_salida)
-    with open('horarios.json', 'w', encoding='utf-8') as f:
+    with open('practica2/horarios.json', 'w', encoding='utf-8') as f:
         json.dump({'horarios':horarios}, f, indent=4)
 
 def formatear_entrada(hora_completa):

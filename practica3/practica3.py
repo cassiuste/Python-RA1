@@ -12,12 +12,11 @@ class RegistroHorario:
         return self.salida - self.entrada
     
 
-
 class Empleado:
 
-    def __init__(self, nombre: str, registrosHorario: list[RegistroHorario]):
+    def __init__(self, nombre: str):
         self.nombre = nombre
-        self.registrosHorario = registrosHorario
+        self.registrosHorario = []
         
 
     def agregar_registro(self, registroHorario):
@@ -31,18 +30,11 @@ class Empleado:
         return horas_totales
 
     def dias_trabajados(self) -> int:
-        for registro in self.registrosHorario:
-        # Crea el set con todos los dias trabajados
-            if registro.empleado not in trabajador_dias:
-                trabajador_dias = set()
-            else:
-                trabajador_dias[registro.empleado].add(registro.dia)
-
-        return len(trabajador_dias)
+        dias = {registro.dia for registro in self.registrosHorario}
+        return len(dias)
 
     def fila_csv(self):
-        return f"{self.nombre};{self.horas_totales()};{self.dias_trabajados()}"
-
+        return [self.nombre,self.dias_trabajados(),self.horas_totales()]
 
 def leer_registros():
     registros = []
@@ -60,12 +52,11 @@ def leer_registros():
     print(f"Se han leído {len(registros)} registros")
     return registros
 
-
 class GestorHorarios:
     
-    def __init__(self, empleados: set[Empleado], registrosHorario: list[RegistroHorario]):
-        self.empleados = empleados
-        registrosHorario = registrosHorario
+    def __init__(self):
+        self.registrosHorario = []
+        self.empleados = set()
 
     def cargar_registros(self):
         self.registrosHorario = leer_registros()
@@ -90,12 +81,14 @@ class GestorHorarios:
             
             escritor.writerow(['empleado','dias_trabajados','horas_totales'])
             for empleado in self.empleados:
-                escritor.writerow(empleado.fila_csv)
+                escritor.writerow(empleado.fila_csv())
 
+gestor = GestorHorarios()
+gestor.cargar_registros()
+gestor.crear_empleados()
+gestor.crear_resumen()
 
 registros = leer_registros()
-
-
 
 empleados_por_dia = {}
 for registro in registros:
@@ -127,7 +120,6 @@ for registro in registros:
     trabajador_dias[registro.empleado].add(registro.dia)
 
 print(trabajador_dias)
-
 # Escribir un resumen en un nuevo CSV
 with open('practica3/resumen_semanal.csv', 'w', newline='', encoding='utf-8') as f:
     escritor = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -141,11 +133,11 @@ print("Se ha generado el fichero resumen_horarios.csv")
 
 def responder_preguntas():
     #  ¿Qué empleados trabajaron en todos los días?
-    # empleados_todos_dias = {empleado for empleado, dias in trabajador_dias.items if len(dias) == 7}
+    # empleados_todos_dias = {empleado for empleado, dias in trabajador_dias.items() if len(dias) == 7}
     empleados_todos_dias = empleados_por_dia['Lunes'] & empleados_por_dia['Martes'] &empleados_por_dia['Miercoles'] & empleados_por_dia['Jueves'] & empleados_por_dia['Viernes'] & empleados_por_dia['Sabado']& empleados_por_dia['Domingo']
     print(f'Los empleados que trabajaron todos los dias son: {empleados_todos_dias}')
     # ¿Quiénes trabajaron sólo en un día concreto?
-    empleados_un_dia = {empleado for empleado, dias in trabajador_dias.items if len(dias) == 1}
+    empleados_un_dia = {empleado for empleado, dias in trabajador_dias.items() if len(dias) == 1}
     print(f'Los empleados que trabajaron un solo dia son: {empleados_un_dia}')
 
 responder_preguntas()

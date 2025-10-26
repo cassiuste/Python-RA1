@@ -123,8 +123,9 @@ class Evento:
     def listar_ingresos_eventos():
         if (Evento.ingreso_eventos):
             print("Los ingresos por evento son: ") 
-            for id, ingresos in Evento.ingreso_eventos.items():
-                print(f"Id del Evento = {id}: Ingresos: {ingresos}")
+            for evento in Evento.eventos.values():
+                ingresos = Evento.ingreso_eventos.get(evento.id, 0)
+                print(f"Id del Evento = {evento.id} - {evento.nombre}: Ingresos: {ingresos}")
         else:
             print("No hay Ingresos en los eventos del sistema. ")
 
@@ -319,7 +320,7 @@ class Gestor:
             
             escritor.writerow(['id_evento', 'nombre', 'categoria', 'fecha_evento', 'ingreso_evento'])
             for evento in Evento.eventos.values():
-                ingresos = Evento.ingreso_eventos[evento.id]
+                ingresos = Evento.ingreso_eventos.get(evento.id, 0)
                 escritor.writerow([evento.id, evento.nombre, evento.categoria, evento.fecha_evento, ingresos])
         
         print("Se ha generado el archivo informe_resumen.csv")

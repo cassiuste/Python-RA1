@@ -65,17 +65,20 @@ id;nombre;categoria;fecha_evento
 1;Concierto Rock;Musica;2025-12-10
 2;Obra de Teatro;Teatro;2022-11-05
 3;Exposición de Arte;Arte;2024-10-20
+4;Festival de Cine;Cine;2026-03-15
 ```
 
 **ventas.csv**
 
 ```
 id;id_cliente;id_evento;fecha_venta;precio
-1;1;1;2024-12-15;15000
-2;2;1;2024-12-20;15000
-3;3;2;2022-10-25;12000
-4;1;3;2024-09-15;10000
-5;2;3;2024-09-30;9500
+1;1;1;2024-12-15;1500
+2;2;1;2024-12-20;1500
+3;3;2;2022-10-25;1200
+4;1;3;2024-09-15;1000
+5;2;3;2024-09-30;1000
+6;1;4;2025-11-10;2000
+7;2;4;2025-11-12;2000
 ```
 
 ## Ejemplo de informe generado
@@ -84,7 +87,8 @@ id;id_cliente;id_evento;fecha_venta;precio
 
 ```
 id_evento;nombre;categoria;fecha_evento;ingreso_evento
-1;Concierto Rock;Musica;2025-12-10;30000.0
-2;Obra de Teatro;Teatro;2022-11-05;12000.0
-3;Exposición de Arte;Arte;2024-10-20;19500.0
+1;Concierto Rock;Musica;2025-12-10;3000.0
+2;Obra de Teatro;Teatro;2022-11-05;1200.0
+3;Exposición de Arte;Arte;2024-10-20;2000.0
+4;Festival de Cine;Cine;2026-03-15;4000.0
 ```

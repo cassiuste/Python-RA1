@@ -48,8 +48,8 @@ class Cliente:
             except:
                 print("Error en la entrada de datos")
 
-    # Metodo que se utiliza en el alta de cliente para poder cuando se crea el cliente
-    # agregarlo a el csv de clientes incrementalmente  
+    # Metodo que se utiliza en el alta de cliente para cuando se crea el cliente
+    # agregarlo al csv de clientes incrementalmente  
     def guardar_clienteCSV(self):
         with open('Final/data/clientes.csv', 'a', newline='', encoding='utf-8') as f:
             escritor = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -71,6 +71,8 @@ class Cliente:
         try:
             with open('Final/data/clientes.csv', newline='', encoding='utf-8') as file:
                 lector = csv.reader(file, delimiter=';', quotechar='"')
+                # Se pone el next para que no lea la primera linea que es el encabezado
+                next(lector)
                 for fila in lector:
                     id, nombre, email, fecha = fila
                     id = int(id)
@@ -107,7 +109,6 @@ class Evento:
         self.fecha_evento = fecha_evento
         # El ingreso se calcula despues...
         # Se iterara sobre el precio de las ventas
-        self.ingreso = 0
 
     @staticmethod
     def listar_eventos():
@@ -120,7 +121,8 @@ class Evento:
     # Lista los ingresos de manera formateada
     @staticmethod
     def listar_ingresos_eventos():
-        if (Evento.ingreso_eventos): 
+        if (Evento.ingreso_eventos):
+            print("Los ingresos por evento son: ") 
             for id, ingresos in Evento.ingreso_eventos.items():
                 print(f"Id del Evento = {id}: Ingresos: {ingresos}")
         else:
@@ -149,6 +151,7 @@ class Evento:
         try:
             with open('Final/data/eventos.csv', newline='', encoding='utf-8') as file:
                 lector = csv.reader(file, delimiter=';', quotechar='"')
+                next(lector)
                 for fila in lector:
                     # Se espera formato: nombre;categoria;fecha_evento
                     id, nombre, categoria, fecha = fila
@@ -193,6 +196,7 @@ class Venta:
         try:
             with open('Final/data/ventas.csv', newline='', encoding='utf-8') as file:
                 lector = csv.reader(file, delimiter=';', quotechar='"')
+                next(lector)
                 for fila in lector:
                     # Formato esperado: id_cliente;id_evento;fecha_venta;precio
                     id, id_cliente, id_evento, fecha, precio = fila
@@ -337,7 +341,7 @@ class Gestor:
 
             elif opcion == '2':
                 Evento.ingreso_por_evento()
-                print(f"Los ingresos por eventos son: {Evento.listar_ingresos_eventos()}")
+                Evento.listar_ingresos_eventos()
 
             elif opcion == '3':
                 print(f"Las Categorias existentes son: {Evento.categorias}")

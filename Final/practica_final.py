@@ -51,12 +51,10 @@ class Cliente:
     # Metodo que se utiliza en el alta de cliente para poder cuando se crea el cliente
     # agregarlo a el csv de clientes incrementalmente  
     def guardar_clienteCSV(self):
-        with open('practica_final/data/clientes.csv', 'a', newline='', encoding='utf-8') as f:
+        with open('Final/data/clientes.csv', 'a', newline='', encoding='utf-8') as f:
             escritor = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             escritor.writerow([self.id,self.nombre,self.email,self.fecha_alta])
 
-    # def fila_csv(self):
-    #     return f"{self.nombre};{self.email};{self.fecha_alta}"
 
     @staticmethod
     def listar_clientes():
@@ -71,7 +69,7 @@ class Cliente:
     @staticmethod
     def cargar_clientes_csv():
         try:
-            with open('practica_final/data/clientes.csv', newline='', encoding='utf-8') as file:
+            with open('Final/data/clientes.csv', newline='', encoding='utf-8') as file:
                 lector = csv.reader(file, delimiter=';', quotechar='"')
                 for fila in lector:
                     id, nombre, email, fecha = fila
@@ -119,13 +117,20 @@ class Evento:
             for id, evento in Evento.eventos.items():
                 print(f"Id = {id}: {evento}")
 
+    # Lista los ingresos de manera formateada
+    @staticmethod
+    def listar_ingresos_eventos():
+        if (Evento.ingreso_eventos): 
+            for id, ingresos in Evento.ingreso_eventos.items():
+                print(f"Id del Evento = {id}: Ingresos: {ingresos}")
+        else:
+            print("No hay Ingresos en los eventos del sistema. ")
+
+
 
     def dias_hasta_evento(self) -> int:
         return (self.fecha_evento - date.today()).days
 
-
-    def exportar_informe():
-        return
 
     @staticmethod
     def ingreso_por_evento():
@@ -142,7 +147,7 @@ class Evento:
     @staticmethod
     def cargar_eventos_csv():
         try:
-            with open('practica_final/data/eventos.csv', newline='', encoding='utf-8') as file:
+            with open('Final/data/eventos.csv', newline='', encoding='utf-8') as file:
                 lector = csv.reader(file, delimiter=';', quotechar='"')
                 for fila in lector:
                     # Se espera formato: nombre;categoria;fecha_evento
@@ -186,7 +191,7 @@ class Venta:
     # Carga las ventas y los agrega a la lista de ventas de la clase
     def cargar_ventas_csv():
         try:
-            with open('practica_final/data/ventas.csv', newline='', encoding='utf-8') as file:
+            with open('Final/data/ventas.csv', newline='', encoding='utf-8') as file:
                 lector = csv.reader(file, delimiter=';', quotechar='"')
                 for fila in lector:
                     # Formato esperado: id_cliente;id_evento;fecha_venta;precio
@@ -293,16 +298,29 @@ class Gestor:
         # Set que devuelve los precios que estan en las ventas
         precios = {venta.precio for venta in Venta.ventas.values()}
         if precios:
-            min = min(precios)
-            max = max(precios)
-            media = media(precios)
-            return(min,max,media)
+            minimo = min(precios)
+            maximo = max(precios)
+            promedio = sum(precios) / len(precios)
+            return(minimo,maximo,promedio)
         else:
             return (0,0,0)
 
+    # Crea el informe_resumen.csv que da el evento por el ingreso por evento
     def exportar_informe(self):
-        return
+        if not Evento.ingreso_eventos:
+            Evento.ingreso_por_evento()
+            
+        with open('Final/data/informe_resumen.csv', 'w', newline='', encoding='utf-8') as f:
+            escritor = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            
+            escritor.writerow(['id_evento', 'nombre', 'categoria', 'fecha_evento', 'ingreso_evento'])
+            for evento in Evento.eventos.values():
+                ingresos = Evento.ingreso_eventos[evento.id]
+                escritor.writerow([evento.id, evento.nombre, evento.categoria, evento.fecha_evento, ingresos])
+        
+        print("Se ha generado el archivo informe_resumen.csv")
     
+
     def estadisticas(self):
         while True:
             print("========== Métricas ==========")
@@ -319,7 +337,7 @@ class Gestor:
 
             elif opcion == '2':
                 Evento.ingreso_por_evento()
-                print(f"Los ingresos por eventos son: {Evento.ingreso_eventos.values()}")
+                print(f"Los ingresos por eventos son: {Evento.listar_ingresos_eventos()}")
 
             elif opcion == '3':
                 print(f"Las Categorias existentes son: {Evento.categorias}")
@@ -328,10 +346,10 @@ class Gestor:
                 gestor.evento_mas_proximo()
             
             elif opcion == '5':
-               min, max, media = gestor.estadistica_precios()
+               min, max, promedio = gestor.estadistica_precios()
                print(f"El precio minimo es: {min}")
                print(f"El precio maximo es: {max}")
-               print(f"La media de precios es: {media}")
+               print(f"La media de precios es: {promedio}")
             
             elif opcion == '6':
                 break
@@ -398,6 +416,8 @@ def menu():
 
         elif opcion == '6':
             gestor.exportar_informe()
+            print("El archivo informa_resumen se ha creado exitosamente")
+
         elif opcion == '7':
             print("¡Hasta luego!")
             break

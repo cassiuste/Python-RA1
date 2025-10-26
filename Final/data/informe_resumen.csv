@@ -1,4 +1,5 @@
 id_evento;nombre;categoria;fecha_evento;ingreso_evento
-1;Concierto Rock;Musica;2025-12-10;30000.0
-2;Obra de Teatro;Teatro;2022-11-05;12000.0
-3;Exposición de Arte;Arte;2024-10-20;19500.0
+1;Concierto Rock;Musica;2025-12-10;3000.0
+2;Obra de Teatro;Teatro;2022-11-05;1200.0
+3;Exposición de Arte;Arte;2024-10-20;2000.0
+4;Festival de Cine;Cine;2026-03-15;4000.0

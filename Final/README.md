@@ -35,7 +35,7 @@ Final/
     ├── clientes.csv          # Datos de clientes (id;nombre;email;fecha_alta)
     ├── eventos.csv           # Datos de eventos (id;nombre;categoria;fecha_evento)
     ├── ventas.csv            # Datos de ventas (id;id_cliente;id_evento;fecha_venta;precio)
-    └── informe_resumen.csv   # Informe generado con ingresos por evento
+    └── informe_resumen.csv   # Informe generado con el resumen de actividad
 ```
 
 ## Clases principales

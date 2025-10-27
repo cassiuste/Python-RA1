@@ -108,7 +108,8 @@ class Evento:
         Evento.categorias.add(categoria)
         self.fecha_evento = fecha_evento
         # El ingreso se calcula despues...
-        # Se iterara sobre el precio de las ventas
+        # Se iterara sobre el precio de las ventas por la cantidad
+        # de eventos relacionados que tengan
 
     @staticmethod
     def listar_eventos():
@@ -225,10 +226,8 @@ class Venta:
 # como en la practica3
 class Gestor:
     def __init__(self):
-        self.clientes = {}
-        self.eventos = {}
-        self.ventas = {}
-
+        pass
+    
     # Metodo que proporciona una nueva id para 
     # guardarla en el objeto
     @staticmethod
@@ -271,25 +270,14 @@ class Gestor:
             ingresos_totales += venta.precio
         return ingresos_totales
     
-
-    def ingreso_por_evento(self):
-        ingresos_eventos = {}
-        for venta in Venta.ventas.values():
-            if venta.id_evento not in ingresos_eventos.keys():
-                ingresos_eventos[venta.id_evento] = venta.precio
-            else:
-                ingresos_eventos[venta.id_evento] += venta.precio
-        return ingresos_eventos
-    
-
     # Retorna el evento mas proximo y los dias que faltan para que ocurra
     def evento_mas_proximo(self):
         dias_hasta_evento = {}
 
         for evento in Evento.eventos.values():
             dias = (evento.fecha_evento - date.today()).days
-        if dias >= 0:
-            dias_hasta_evento[dias] = evento
+            if dias >= 0:
+                dias_hasta_evento[dias] = evento
     
         if dias_hasta_evento:
             dias_minimos = min(dias_hasta_evento.keys())
@@ -300,7 +288,7 @@ class Gestor:
 
 
     def estadistica_precios(self):
-        # Set que devuelve los precios que estan en las ventas
+        # Set que devuelve los precios que estan los precios de las ventas
         precios = {venta.precio for venta in Venta.ventas.values()}
         if precios:
             minimo = min(precios)

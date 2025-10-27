@@ -126,7 +126,7 @@ class Evento:
             print("Los ingresos por evento son: ") 
             for evento in Evento.eventos.values():
                 ingresos = Evento.ingreso_eventos.get(evento.id, 0)
-                print(f"Id del Evento = {evento.id} - {evento.nombre}: Ingresos: {ingresos}")
+                print(f"Id del Evento = {evento.id} - Nombre: {evento.nombre} - Ingresos: {ingresos}")
         else:
             print("No hay Ingresos en los eventos del sistema. ")
 

@@ -52,6 +52,7 @@ def leer_registros():
     print(f"Se han leído {len(registros)} registros")
     return registros
 
+# El gestor es una clase de clases que maneja el programa
 class GestorHorarios:
     
     def __init__(self):

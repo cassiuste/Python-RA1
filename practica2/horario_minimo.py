@@ -28,6 +28,9 @@ def escribir_horarios(nombre_empleado, hora_entrada, hora_salida):
     with open('practica2/horarios.json', 'w', encoding='utf-8') as f:
         json.dump({'horarios':horarios}, f, indent=4)
 
+
+# Valida que la entrada del horario sea correcta y devuelve
+# las horas y los minutos si lo es
 def formatear_entrada(hora_completa):
     try:
         hora = hora_completa[0:2]
